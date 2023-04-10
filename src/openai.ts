@@ -75,7 +75,7 @@ async function whisper(username:string,videoPath: string): Promise<string> {
   if (response) {
     return response.text;
   }else{
-    return "Speech to text failed"
+    return "Speech to text failed1"
   }
 }
 
