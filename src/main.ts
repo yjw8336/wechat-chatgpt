@@ -1,4 +1,4 @@
-import { WechatyBuilder } from "wechaty";
+import {ScanStatus, WechatyBuilder} from "wechaty";
 import QRCode from "qrcode";
 import { ChatGPTBot } from "./bot.js";
 import {config} from "./config.js";
@@ -16,10 +16,12 @@ async function main() {
   bot
     .on("scan", async (qrcode, status) => {
       const url = `https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`;
-      console.log(`Scan QR Code to login: ${status}\n${url}`);
-      console.log(
-        await QRCode.toString(qrcode, { type: "terminal", small: true })
-      );
+        if (status === ScanStatus.Waiting) {
+            console.log(`Scan QR Code to login: ${status}\n${url}`);
+            console.log(
+                await QRCode.toString(qrcode, {type: "terminal", small: true})
+            );
+        }
     })
     .on("login", async (user) => {
       chatGPTBot.setBotName(user.name());
