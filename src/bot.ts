@@ -252,11 +252,12 @@ export class ChatGPTBot {
         return;
       });
       // Whisper
+      const that = this;
       whisper("",fileName).then( (result) => {
-        if (this.triggerGPTMessage(result, privateChat)) {
-          const text = this.cleanMessage(result, privateChat);
+        if (that.triggerGPTMessage(result, privateChat)) {
+          const text = that.cleanMessage(result, privateChat);
           if (privateChat) {
-            this.onPrivateMessage(talker, text);
+            that.onPrivateMessage(talker, text);
           }
         }
       })
