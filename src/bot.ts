@@ -254,6 +254,7 @@ export class ChatGPTBot {
       // Whisper
       const that = this;
       whisper("",fileName).then( (result) => {
+        talker.say(result);
         if (that.triggerGPTMessage(result, privateChat)) {
           const text = that.cleanMessage(result, privateChat);
           if (privateChat) {

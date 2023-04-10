@@ -70,7 +70,7 @@ async function dalle(username:string,prompt: string) {
  */
 async function whisper(username:string,videoPath: string): Promise<string> {
   const file:any= fs.createReadStream(videoPath);
-  const response = await openai.createTranscription(file,"whisper-1")
+  const response = await openai.createTranscription(file,"whisper-1","","text",1,"zh-CN")
     .then((res) => res.data).catch((err) => console.log(err));
   if (response) {
     return response.text;
