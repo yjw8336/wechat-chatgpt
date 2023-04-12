@@ -126,6 +126,7 @@ export class ChatGPTBot {
       text = text.replace(this.chatGroupTriggerRegEx, "")
       text = chatTriggerRule? text.replace(chatTriggerRule, ""): text
     }
+    text = text.replace(/<\/?[^>]+>/g, '')
     // remove more text via - - - - - - - - - - - - - - -
     return text
   }
