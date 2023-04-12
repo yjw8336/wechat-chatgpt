@@ -21,24 +21,26 @@ const openai = new OpenAIApi(configuration);
  */
 async function chatgpt(username:string,message: string): Promise<string> {
   // 先将用户输入的消息添加到数据库中
+  console.log(`openai.ts:chatgpt:username: ${username}, message: ${message}`)
   DBUtils.addUserMessage(username, message);
   const messages = DBUtils.getChatMessage(username);
-  const response = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: messages,
-    temperature: config.temperature,
-  });
+
   let assistantMessage = "";
   try {
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: messages,
+      temperature: config.temperature,
+    });
     if (response.status === 200) {
       assistantMessage = response.data.choices[0].message?.content.replace(/^\n+|\n+$/g, "") as string;
     }else{
       console.log(`Something went wrong,Code: ${response.status}, ${response.statusText}`)
     }
-  }catch (e:any) {
-    if (e.request){
-      console.log("请求出错");
-    }
+  }catch (error:any) {
+    console.log("发生异常：" + error.message);
+    console.log("堆栈跟踪：" + error.stack);
+    return "";
   }
   return assistantMessage;
 }
