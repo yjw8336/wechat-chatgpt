@@ -126,8 +126,11 @@ export class ChatGPTBot {
       text = text.replace(this.chatGroupTriggerRegEx, "")
       text = chatTriggerRule? text.replace(chatTriggerRule, ""): text
     }
+    console.log('cleanMessage');
+    console.log(text);
     text = text.replace(/<\/?[^>]+>/g, '')
     // remove more text via - - - - - - - - - - - - - - -
+    console.log(text);
     return text
   }
   async getGPTMessage(talkerName: string,text: string): Promise<string> {
