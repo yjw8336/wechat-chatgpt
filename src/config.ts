@@ -11,5 +11,6 @@ export const config: IConfig = {
   disableGroupMessage: process.env.DISABLE_GROUP_MESSAGE === "true",
   temperature: process.env.TEMPERATURE ? parseFloat(process.env.TEMPERATURE) : 0.6,
   blockWords: process.env.BLOCK_WORDS?.split(",") || [],
+  blockUsers: process.env.BLOCK_USER?.split(",") || [],
   chatgptBlockWords: process.env.CHATGPT_BLOCK_WORDS?.split(",") || [],
 };
