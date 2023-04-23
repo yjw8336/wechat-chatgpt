@@ -1,33 +1,45 @@
-name: ci
+name: Publish Docker image
 
 on:
+  # Test pub with dev tag
   push:
     branches:
-      - 'main'
+      - ci/fix-muti-platform
+  release:
+    types: [published]
 
 jobs:
-  docker:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Check out the repo
         uses: actions/checkout@v3
-      -
-        name: Set up QEMU
+
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-      -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      -
-        name: Login to Docker Hub
+
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Build and push
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: yjw8336/wechat-chatgpt
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: yjw8336/wechat-chatgpt:1.0.0
+          tags: ${{ steps.meta.outputs.tags }}
+          # FIXME: Chrome doesn't seem to install on ARM, so skip it for now
+          # platforms: linux/amd64,linux/arm64
+          labels: ${{ steps.meta.outputs.labels }}
