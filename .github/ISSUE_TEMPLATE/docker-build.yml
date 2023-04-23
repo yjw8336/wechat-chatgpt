@@ -1,0 +1,30 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build the Docker image
+        uses: docker/build-push-action@v1
+        with:
+          context: .
+          push: true
+          tags: yjw8336/wechat-chatgpt:latest
+          build-args: |
+            HTTP_PROXY=$HTTP_PROXY
+            HTTPS_PROXY=$HTTPS_PROXY
+            NO_PROXY=$NO_PROXY
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY: docker.io
+
